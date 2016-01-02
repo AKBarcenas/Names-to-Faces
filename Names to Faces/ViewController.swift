@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
+    var people = [Person]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +57,9 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             jpegData.writeToFile(imagePath, atomically: true)
         }
         
+        let person = Person(name: "Unknown", image: imageName)
+        people.append(person)
+        collectionView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
     }
     
