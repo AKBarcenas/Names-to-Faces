@@ -9,7 +9,9 @@
 import UIKit
 
 class PersonCell: UICollectionViewCell {
+    // Where the person's image will be displayed.
     @IBOutlet weak var imageView: UIImageView!
+    // Where the person's name will be displayed.
     @IBOutlet weak var name: UILabel!
     
 }

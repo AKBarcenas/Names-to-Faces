@@ -9,9 +9,20 @@
 import UIKit
 
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    // The collection view that will be used to displayed all of the people.
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    // Keeps track of all the people that have been added.
     var people = [Person]()
 
+    /*
+     * Function Name: viewDidLoad
+     * Parameters: None
+     * Purpose: This method creates a button that allows the user to add a person to the collection view.
+     *   This method also loads in people that were saved in NSUserDefaults.
+     * Return Value: None
+     */
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -25,9 +36,26 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         }
     }
     
+    /*
+     * Function Name: collectionView
+     * Parameters: collectionView - the collection view that we are modifying.
+     *   section - the number of things in the section that we are dealing with.
+     * Purpose: This method creates items in the collection view according to how many people there are.
+     * Return Value: None
+     */
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return people.count
     }
+    
+    /*
+     * Function Name: collectionView
+     * Parameters: collectionView - the collection view that we are modifying.
+     *   indexPath - specifies the location of the item in the colletion view.
+     * Purpose: This method reuses a cell in the collection view and load another person. This method also formats
+     *   the cell with specific features.
+     * Return Value: PersonCell
+     */
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Person", forIndexPath: indexPath) as! PersonCell
@@ -46,6 +74,15 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         return cell
     }
+    
+    /*
+     * Function Name: collectionView
+     * Parameters: collectionView - the collection view that called this method.
+     *   indexPath - the path to the cell in the collection view that called this method.
+     * Purpose: This method creates an action view controller that allows the user to add a
+     *   name to the collection view cell that they pressed.
+     * Return Value: None
+     */
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let person = people[indexPath.item]
@@ -66,6 +103,13 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         presentViewController(ac, animated: true, completion: nil)
     }
     
+    /*
+     * Function Name: addNewPerson
+     * Parameters: None
+     * Purpose: This method presents a view controller that allows the user to choose an image for a person.
+     * Return Value: None
+     */
+    
     func addNewPerson() {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
@@ -73,9 +117,25 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         presentViewController(picker, animated: true, completion: nil)
     }
     
+    /*
+     * Function Name: imagePickerControllerDidCancel
+     * Parameters: picker - the picker where cancel was pressed.
+     * Purpose: This method dismisses the image picker when cancel was pressed inside of it.
+     * Return Value: None
+     */
+    
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    /*
+     * Function Name: imagePickerController
+     * Parameters: picker - the picker that we are modifying.
+     *   info - a dictionary containing the edited image and original image.
+     * Purpose: This method takes the image that was selected and turns it into a jpeg. This jpeg is written to disk
+     *   and afterwards this image is used to create an unkown person in the collection view that can be renamed.
+     * Return Value: None
+     */
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         var newImage: UIImage
@@ -102,11 +162,25 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         save()
     }
     
+    /*
+     * Function Name: getDocumentsDirectory
+     * Parameters: None
+     * Purpose: This method retrieves the parth to the documents directory where information for this app is stored.
+     * Return Value: None
+     */
+    
     func getDocumentsDirectory() -> NSString {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
+    
+    /*
+     * Function Name: save
+     * Parameters: None
+     * Purpose: This method converts the people into NSData and saves the data of people into user defaults.
+     * Return Value: None
+     */
     
     func save() {
         let savedData = NSKeyedArchiver.archivedDataWithRootObject(people)
